@@ -3,6 +3,8 @@ package modules
 import (
 	"easyrat/utils/types"
 	"fmt"
+	"os"
+	"os/user"
 	"runtime"
 
 	"github.com/jaypipes/ghw"
@@ -10,6 +12,20 @@ import (
 
 func DeviceInfo() types.DeviceInfoStruct {
 	dev_info := types.DeviceInfoStruct{}
+
+	// User information
+	user, err := user.Current()
+	if err != nil {
+		fmt.Printf("Error getting user info: %v", err)
+	}
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		fmt.Printf("Error getting hostname info: %v", err)
+	}
+	dev_info.HostName = hostname
+
+	dev_info.UserName = user.Username
 
 	// OS information
 	dev_info.OSName = runtime.GOOS

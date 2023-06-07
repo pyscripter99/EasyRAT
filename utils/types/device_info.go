@@ -1,6 +1,8 @@
 package types
 
 type DeviceInfoStruct struct {
+	UserName    string `json:"username"`
+	HostName    string `json:"hostname"`
 	OSName      string `json:"os_name"`
 	Arch        string `json:"architecture"`
 	CPUCores    uint32 `json:"cpu_cores"`

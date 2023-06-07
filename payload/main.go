@@ -29,7 +29,6 @@ func divider(title string) {
 func main() {
 	// setup client
 	divider("Setup")
-	utils.MakeClient()
 	// Run hello function
 	divider("Hello")
 	modules.Hello()
@@ -45,4 +44,7 @@ func main() {
 	// Get Device Information
 	divider("Device Information")
 	fmt.Println(modules.DeviceInfo())
+
+	// Send Device Information
+	utils.PostJSON("/payload/dev_info", modules.DeviceInfo())
 }
