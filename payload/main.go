@@ -7,12 +7,6 @@ import (
 	"strings"
 )
 
-const (
-	https = false
-	ip    = "127.0.0.1"
-	port  = 5618
-)
-
 func divider(title string) {
 	lineLength := 30
 	titleLength := len(title)
@@ -27,8 +21,12 @@ func divider(title string) {
 }
 
 func main() {
-	// setup client
+	// Connect to the server
 	divider("Setup")
+	if err := utils.ConnectServer(); err != nil {
+		panic("Could not connect to the server! " + err.Error())
+	}
+
 	// Run hello function
 	divider("Hello")
 	modules.Hello()
@@ -43,8 +41,5 @@ func main() {
 
 	// Get Device Information
 	divider("Device Information")
-	fmt.Println(modules.DeviceInfo())
-
-	// Send Device Information
-	utils.PostJSON("/payload/dev_info", modules.DeviceInfo())
+	fmt.Printf("%+v\n", modules.DeviceInfo())
 }

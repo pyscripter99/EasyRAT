@@ -7,6 +7,7 @@ import (
 	"os/user"
 	"runtime"
 
+	"github.com/denisbrodbeck/machineid"
 	"github.com/jaypipes/ghw"
 )
 
@@ -23,9 +24,15 @@ func DeviceInfo() types.DeviceInfoStruct {
 	if err != nil {
 		fmt.Printf("Error getting hostname info: %v", err)
 	}
-	dev_info.HostName = hostname
 
+	machine_id, err := machineid.ID()
+	if err != nil {
+		fmt.Printf("Error getting hostname info: %v", err)
+	}
+
+	dev_info.HostName = hostname
 	dev_info.UserName = user.Username
+	dev_info.MachineID = machine_id
 
 	// OS information
 	dev_info.OSName = runtime.GOOS

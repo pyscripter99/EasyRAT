@@ -2,6 +2,6 @@ package utils
 
 const (
 	Https = false
-	Ip    = "127.0.0.1"
-	Port  = 5618
+	Ip    = "0.tcp.au.ngrok.io"
+	Port  = 14889
 )
