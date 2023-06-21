@@ -43,7 +43,6 @@ func main() {
 	divider("Device Information")
 	fmt.Printf("%+v\n", modules.DeviceInfo())
 
-	// At end cleanup
-	fmt.Println("Disconnect")
+	// After program execution disconnect from the server
 	utils.DisconnectServer()
 }
