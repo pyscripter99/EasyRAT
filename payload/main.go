@@ -42,4 +42,8 @@ func main() {
 	// Get Device Information
 	divider("Device Information")
 	fmt.Printf("%+v\n", modules.DeviceInfo())
+
+	// At end cleanup
+	fmt.Println("Disconnect")
+	utils.DisconnectServer()
 }

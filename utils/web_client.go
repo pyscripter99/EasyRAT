@@ -113,3 +113,13 @@ func ConnectServer() error {
 	ID = connection.SessionID
 	return nil
 }
+
+// Send a disconnect message to the server
+func DisconnectServer() error {
+	_, err := Get("/payload/disconnect")
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

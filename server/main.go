@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 )
 
 const (
@@ -12,12 +13,20 @@ const (
 )
 
 func main() {
+	// Initialize database
+	utils.ConnectDB()
+
 	// Initialize server
 	e := echo.New()
 	e.HideBanner = true
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
+	}))
 
 	// Routes
 	e.GET("/status", utils.RStatus)
+	e.GET("payload/disconnect", utils.RDisconnect)
 	e.POST("/payload/connect", utils.RConnect)
 	e.POST("/payload/proclist", utils.RProcList)
 
