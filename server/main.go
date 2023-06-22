@@ -26,7 +26,8 @@ func main() {
 
 	// Routes
 	e.GET("/status", utils.RStatus)
-	e.GET("payload/disconnect", utils.RDisconnect)
+	e.GET("/payload/disconnect", utils.RDisconnect)
+	e.GET("/server/bots", utils.RGetBots)
 	e.POST("/payload/connect", utils.RConnect)
 	e.POST("/payload/proclist", utils.RProcList)
 
