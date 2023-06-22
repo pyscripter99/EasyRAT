@@ -21,7 +21,7 @@ func ConnectDB() {
 		panic("Failed to init db")
 	}
 
-	DB = db
+	db.AutoMigrate(&Client{}, &types.Task{}, &types.Parameter{})
 
-	db.AutoMigrate(&Client{})
+	DB = db
 }

