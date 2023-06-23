@@ -7,12 +7,6 @@ import (
 	"gorm.io/gorm"
 )
 
-type Client struct {
-	ID        string `gorm:"primary_key"`
-	Connected bool
-	types.DeviceInfoStruct
-}
-
 var DB *gorm.DB
 
 func ConnectDB() {
@@ -21,7 +15,7 @@ func ConnectDB() {
 		panic("Failed to init db")
 	}
 
-	db.AutoMigrate(&Client{}, &types.Task{}, &types.Parameter{})
+	db.AutoMigrate(&types.Client{}, &types.Task{}, &types.Parameter{})
 
 	DB = db
 }

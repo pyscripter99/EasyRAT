@@ -110,7 +110,7 @@ func ConnectServer() error {
 		var connection types.ConnectResp
 		err = json.NewDecoder(resp.Body).Decode(&connection)
 		if err != nil {
-			panic("Error decoding json. " + err.Error())
+			return err
 		}
 		ID = connection.SessionID
 		Connected = true
@@ -118,6 +118,20 @@ func ConnectServer() error {
 	} else {
 		return errors.New("already connected")
 	}
+}
+
+// Get tasks to execute
+func GetTasks() ([]types.Task, error) {
+	// Get Tasks
+	resp, err := Get("/payload/tasks")
+	if err != nil {
+		return nil, err
+	}
+	var tasks []types.Task
+	if err := json.NewDecoder(resp.Body).Decode(&tasks); err != nil {
+		return nil, err
+	}
+	return tasks, nil
 }
 
 // Send a disconnect message to the server

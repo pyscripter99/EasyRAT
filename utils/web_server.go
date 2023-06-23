@@ -50,3 +50,9 @@ func RGetBots(ctx echo.Context) error {
 	DB.Model(&Client{}).Limit(50).Find(&bots, &Client{Connected: true})
 	return ctx.JSON(http.StatusOK, bots)
 }
+
+func RGetTasks(ctx echo.Context) error {
+	var tasks []types.Task
+	tasks = append(tasks, types.Task{ID: "1", Name: "Hello World", Module: "hello_world", Status: "queued"})
+	return ctx.JSON(http.StatusOK, tasks)
+}

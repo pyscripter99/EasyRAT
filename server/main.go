@@ -24,12 +24,15 @@ func main() {
 		AllowHeaders: []string{echo.HeaderOrigin, echo.HeaderContentType, echo.HeaderAccept},
 	}))
 
-	// Routes
+	// Payload Routes
 	e.GET("/status", utils.RStatus)
 	e.GET("/payload/disconnect", utils.RDisconnect)
-	e.GET("/server/bots", utils.RGetBots)
+	e.GET("/payload/get_tasks", utils.RGetTasks)
 	e.POST("/payload/connect", utils.RConnect)
 	e.POST("/payload/proclist", utils.RProcList)
+
+	// Server Routes
+	e.GET("/server/bots", utils.RGetBots)
 
 	// Run server
 	e.Logger.Fatal(e.Start(":" + fmt.Sprint(port)))
